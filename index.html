@@ -26,6 +26,92 @@
             animation-timeline: --item;
             animation-range: entry 10% cover 30%;
         }
+/* 1. The Card Container: Hide default cursor so we can use the custom lens */
+.subdomain-card {
+    position: relative;
+    cursor: none; 
+}
+
+/* 2. Layer 1: The Subdomain Name (Center, muted, sits behind the reveal) */
+.subdomain-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* 3. Layer 2: The Glimpse (Revealed only by the mask) */
+.glimpse-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #f2eee3; /* Must match body bg to hide the label below */
+    
+    /* The mask creates the 'portal' effect */
+    -webkit-mask-image: radial-gradient(circle 80px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%);
+    mask-image: radial-gradient(circle 80px at var(--mouse-x) var(--mouse-y), black 100%, transparent 100%);
+    
+    opacity: 0; 
+    transition: opacity 0.3s ease;
+}
+
+/* Show the glimpse layer only when hovering the card */
+.subdomain-card:hover .glimpse-layer {
+    opacity: 1;
+}
+
+/* 4. The Visual Lens Ring: The physical circle following the mouse */
+#lens-ring {
+    width: 160px;
+    height: 160px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 100;
+    display: none;
+    /* Optional: subtle glass effect */
+    backdrop-filter: blur(1px) brightness(1.02);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+/* @keyframes expand-circle {
+    from {
+        clip-path: circle(80px at var(--mouse-x) var(--mouse-y));
+        opacity: 0;
+    }
+    to {
+        clip-path: circle(150% at 50% 50%);
+        opacity: 1;
+    }
+} */
+ @keyframes expand-circle {
+    0% {
+        /* Start from the lens size at the mouse position */
+        clip-path: circle(80px at var(--mouse-x) var(--mouse-y));
+        opacity: 0;
+    }
+    100% {
+        /* Expand to fill the screen */
+        clip-path: circle(150% at var(--mouse-x) var(--mouse-y));
+        opacity: 1;
+    }
+}
+
+/* Ensure the overlay covers the whole screen but doesn't delete the background */
+.animate-expand-circle {
+    animation: expand-circle 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* .animate-expand-circle {
+    animation: expand-circle 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+} */
     </style>
 </head>
 <body class="grid-bg">
