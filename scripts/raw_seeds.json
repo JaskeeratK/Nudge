@@ -1,0 +1,8 @@
+[
+    { "topic": "Game Theory", "lens": "builder", "category": "Systems" },
+    { "topic": "Stoicism", "lens": "thinker", "category": "Philosophy" },
+    { "topic": "The Lindy Effect", "lens": "builder", "category": "Finance" },
+    { "topic": "Neuroplasticity", "lens": "thinker", "category": "Psychology" },
+    { "topic": "Brutalist Architecture", "lens": "builder", "category": "Design" },
+    { "topic": "Semiotics", "lens": "thinker", "category": "Media" }
+]
