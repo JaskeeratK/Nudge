@@ -1,0 +1,121 @@
+okay so i have added the js folder and files in it ,and lenses.js in data folder ,what changes do i need to make in index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f2eee3; font-family: 'Inter', sans-serif; color: #1a1a1a; scroll-behavior: smooth; }
+        .serif-font { font-family: 'Playfair Display', serif; }
+        .opaque-border { border: 1px solid #1a1a1a; }
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(0,0,0,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 40px 40px; background-attachment: fixed;
+        }
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal-card {
+            view-timeline-name: --item;
+            view-timeline-axis: block;
+            animation-fill-mode: both;
+            animation-name: reveal;
+            animation-timeline: --item;
+            animation-range: entry 10% cover 30%;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <nav class="w-full h-14 flex items-center justify-between px-6 border-b border-black bg-[#f2eee3]/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="text-xs font-bold tracking-widest uppercase italic">Opaque // Insights</div>
+        
+        <div class="flex items-center gap-4">
+            <button onclick="document.getElementById('narrow').scrollIntoView({behavior: 'smooth'})" class="text-[10px] font-bold uppercase border border-black px-3 py-1 hover:bg-black hover:text-white transition-all">
+                Explore Interests
+            </button>
+            
+            <div class="w-8 h-8 rounded-full border border-black flex items-center justify-center cursor-pointer hover:bg-black hover:text-white transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 pt-24">
+        
+        <header class="mb-32 text-center reveal-card">
+            <h1 class="serif-font text-6xl lowercase italic tracking-tight mb-4">Opaque Insights.</h1>
+            <p class="text-xs uppercase tracking-[0.3em] font-medium opacity-60">Sample the threads of thought</p>
+        </header>
+
+        <div class="space-y-40">
+            <section class="reveal-card">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="text-sm font-bold">01.</span>
+                    <div class="h-px flex-grow bg-black/20"></div>
+                </div>
+                <div class="flex flex-col md:flex-row opaque-border bg-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="md:w-1/2 h-80 opaque-border-r">
+                        <img src="https://images.unsplash.com/photo-1611974717483-36009c3016d7?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="md:w-1/2 p-8 flex flex-col justify-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-700 mb-2">Finance</span>
+                        <h2 class="serif-font text-3xl mb-4 italic">The 10-Year Reset.</h2>
+                        <p class="text-sm font-light text-gray-600">Most students overestimate what they can do in 1 year, but underestimate what compound interest does in 10. You aren't late; you're early.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="reveal-card">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="text-sm font-bold">02.</span>
+                    <div class="h-px flex-grow bg-black/20"></div>
+                </div>
+                <div class="flex flex-col md:flex-row-reverse opaque-border bg-white overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                    <div class="md:w-1/2 h-80 border-l border-black">
+                        <img src="https://images.unsplash.com/photo-1502139214982-d0ad755818d8?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="md:w-1/2 p-8 flex flex-col justify-center">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-purple-700 mb-2">Philosophy</span>
+                        <h2 class="serif-font text-3xl mb-4 italic">Beautifully Useless.</h2>
+                        <p class="text-sm font-light text-gray-600">Philosophy doesn't build bridges, but it tells you why you're crossing them. It's the "Why" behind your "How."</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section id="narrow" class="py-40 text-center reveal-card">
+            <h3 class="serif-font text-4xl md:text-5xl mb-12">Select a  <br> <span class="italic underline decoration-1 underline-offset-8">lens</span> for the hour.</h3>
+            
+            <div class="flex flex-col md:flex-row gap-6 justify-center max-w-3xl mx-auto">
+                <button class="flex-1 opaque-border p-10 bg-white hover:bg-[#e7f5f0] transition-all group shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mb-4 block opacity-40 group-hover:opacity-100">The Builders Path</span>
+                    <span class="serif-font text-2xl italic">I want to know how the world functions.</span>
+                    <div class="mt-6 text-[10px] font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity">Narrow to: Finance, Tech, Marketing ↓</div>
+                </button>
+
+                <button class="flex-1 opaque-border p-10 bg-white hover:bg-[#f6f0f8] transition-all group shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] mb-4 block opacity-40 group-hover:opacity-100">The Thinkers Path</span>
+                    <span class="serif-font text-2xl italic">I want to know how the mind works.</span>
+                    <div class="mt-6 text-[10px] font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity">Narrow to: Philosophy, Psych, Art ↓</div>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full py-12 border-t border-black bg-white text-center">
+        <p class="text-[10px] font-bold uppercase tracking-[0.5em] opacity-40 mb-4">Start your discovery</p>
+        <div class="flex justify-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-black"></div>
+            <div class="w-2 h-2 rounded-full bg-black/10"></div>
+            <div class="w-2 h-2 rounded-full bg-black/10"></div>
+        </div>
+    </footer>
+
+</body>
+</html>
