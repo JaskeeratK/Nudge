@@ -5,8 +5,8 @@ export function renderHome() {
     const app = document.getElementById("app");
     app.innerHTML = `
         <header class="mb-32 text-center reveal-card">
-            <h1 class="serif-font text-6xl lowercase italic tracking-tight mb-4">Opaque Insights.</h1>
-            <p class="text-xs uppercase tracking-[0.3em] font-medium opacity-60">Sample the threads of thought</p>
+            <h1 class="serif-font text-6xl lowercase italic tracking-tight mb-4">Nudge</h1>
+            <p class="text-xs uppercase tracking-[0.3em] font-medium opacity-60">Sampling the threads of what draws you</p>
         </header>
 
         <div class="space-y-40">
