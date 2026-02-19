@@ -211,7 +211,10 @@ function setupOpticalLens() {
 window.expandSubdomain = function(subdomainId) {
     // 1. Get the current lens from state (e.g., 'builder' or 'thinker')
     const currentLens = state.currentLens;
-
+    if (currentLens === "thinker" && subdomainId === "psych") {
+        renderPsychologyEntry();
+        return;
+    }
     // 2. Find the content. 
     // We look for an item where the lens matches AND 
     // the category starts with the same letters as our subdomain ID.
@@ -320,3 +323,133 @@ export function renderExpandedView(id) {
         </div>
     `;
 }
+function renderPsychologyEntry() {
+    const app = document.getElementById("app");
+    state.psychSession.yesCount = 0;
+    state.psychSession.answered = 0;
+
+    app.innerHTML = `
+        <div class="fixed inset-0 bg-[#f2eee3] z-[100] overflow-y-auto animate-expand-circle">
+            <div class="max-w-2xl mx-auto px-6 py-32 text-center">
+
+                <button onclick="navigate('lens')" 
+                        class="text-[10px] font-bold uppercase mb-20 opacity-40 hover:opacity-100 transition-all italic">
+                    ← Back to Lens
+                </button>
+
+                <h1 class="serif-font text-5xl italic mb-16">
+                    Let’s begin with something small.
+                </h1>
+
+                <div class="space-y-10 text-left">
+
+                    ${createPsychCard("You re-read messages before sending.")}
+                    ${createPsychCard("You imagine conversations that never happen.")}
+                    ${createPsychCard("You replay moments longer than necessary.")}
+
+                </div>
+
+            </div>
+        </div>
+    `;
+}
+function createPsychCard(text) {
+    return `
+        <div class="opaque-border bg-white p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <p class="serif-font text-2xl italic mb-6">${text}</p>
+            <div class="flex gap-4">
+                <button onclick="revealInsight(this, true)" 
+                        class="text-[10px] font-bold uppercase border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
+                    Yes
+                </button>
+                <button onclick="revealInsight(this, false)" 
+                        class="text-[10px] font-bold uppercase border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
+                    Not really
+                </button>
+            </div>
+        </div>
+    `;
+}
+window.revealInsight = function(button, agreed) {
+    const card = button.closest(".opaque-border");
+
+    state.psychSession.answered += 1;
+    if (agreed) state.psychSession.yesCount += 1;
+
+    const insight = agreed
+        ? "You tend to mentally simulate outcomes."
+        : "You may process internally without conscious rehearsal.";
+
+    const reveal = document.createElement("p");
+    reveal.className = "serif-font text-lg italic mt-6 opacity-70";
+    reveal.innerText = insight;
+
+    card.appendChild(reveal);
+
+    const buttons = card.querySelectorAll("button");
+    buttons.forEach(b => b.disabled = true);
+
+    // If all 3 answered → transition
+    if (state.psychSession.answered === 3) {
+        setTimeout(showPsychSummary, 900);
+    }
+};
+
+function showPsychSummary() {
+    const app = document.getElementById("app");
+    const score = state.psychSession.yesCount;
+
+    let profile;
+    if (score === 0) profile = "Detached Observer";
+    else if (score === 1) profile = "Selective Reflector";
+    else if (score === 2) profile = "Deep Processor";
+    else profile = "Overactive Narrator";
+
+    app.innerHTML = `
+        <div class="fixed inset-0 bg-[#e8e3d6] z-[100] flex items-center justify-center animate-expand-circle">
+            <div class="text-center max-w-xl px-6">
+                <p class="text-[10px] uppercase tracking-widest opacity-40 mb-6">Pattern Detected</p>
+                <h1 class="serif-font text-5xl italic mb-8">${profile}</h1>
+                <p class="serif-font text-xl opacity-70 mb-12">
+                    Your mind leans toward ${profile.toLowerCase()} processing.
+                </p>
+                <button onclick="loadPsychEssay()" 
+                        class="text-[10px] font-bold uppercase border border-black px-6 py-3 hover:bg-black hover:text-white transition-all">
+                    Explore this pattern →
+                </button>
+            </div>
+        </div>
+    `;
+}
+window.loadPsychEssay = function() {
+    const item = Generatedcontent.find(c => 
+        c.lens === "thinker" && c.category === "Psychology"
+    );
+
+    if (!item) return;
+
+    const bodyHTML = Array.isArray(item.body) 
+        ? item.body.map(p => `<p class="mb-8">${p}</p>`).join('')
+        : item.body.split('\n\n').map(p => `<p class="mb-8">${p}</p>`).join('');
+
+    const app = document.getElementById("app");
+
+    app.innerHTML = `
+        <div class="fixed inset-0 bg-[#f2eee3] z-[100] overflow-y-auto animate-expand-circle">
+            <div class="max-w-2xl mx-auto px-6 py-24">
+                <button onclick="navigate('lens')" 
+                        class="text-[10px] font-bold uppercase mb-12 opacity-50 italic">
+                    ← Return
+                </button>
+
+                <h1 class="serif-font text-5xl italic mb-12">
+                    The Mind's Ever-Sculpting Hand
+                </h1>
+
+                <div class="serif-font text-xl leading-relaxed text-gray-800">
+                    ${bodyHTML}
+                </div>
+            </div>
+        </div>
+    `;
+};

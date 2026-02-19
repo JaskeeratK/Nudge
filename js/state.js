@@ -1,5 +1,9 @@
 export const state = {
-  currentView: "home",   // home | lens | read
+  currentView: "home",
   currentLens: null,
-  preferences: {}        // inferred later
+  preferences: {},
+  psychSession: {
+      yesCount: 0,
+      answered: 0
+  }
 };
