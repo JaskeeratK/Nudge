@@ -323,133 +323,259 @@ export function renderExpandedView(id) {
         </div>
     `;
 }
-function renderPsychologyEntry() {
-    const app = document.getElementById("app");
-    state.psychSession.yesCount = 0;
-    state.psychSession.answered = 0;
 
-    app.innerHTML = `
-        <div class="fixed inset-0 bg-[#f2eee3] z-[100] overflow-y-auto animate-expand-circle">
-            <div class="max-w-2xl mx-auto px-6 py-32 text-center">
 
-                <button onclick="navigate('lens')" 
-                        class="text-[10px] font-bold uppercase mb-20 opacity-40 hover:opacity-100 transition-all italic">
-                    ← Back to Lens
-                </button>
+const ESSAY = {
+    // ── ROOT ──
+    root: {
+        id: "root",
+        text: `There is a particular kind of attention that happens before you decide to pay attention.
 
-                <h1 class="serif-font text-5xl italic mb-16">
-                    Let’s begin with something small.
-                </h1>
+A face across a room. A sentence that snagged. The feeling that something was slightly off before you could name what.
 
-                <div class="space-y-10 text-left">
+The mind is doing something in those moments — something faster than language, and more opinionated than we usually admit.`,
+        fork: {
+            prompt: "What interests you about that?",
+            left:  { label: "The mechanism. What is actually happening in there.", next: "mech" },
+            right: { label: "The meaning. What it says about how we move through the world.", next: "meaning" }
+        }
+    },
 
-                    ${createPsychCard("You re-read messages before sending.")}
-                    ${createPsychCard("You imagine conversations that never happen.")}
-                    ${createPsychCard("You replay moments longer than necessary.")}
+    // ── BRANCH: MECHANISM ──
+    mech: {
+        id: "mech",
+        text: `Researchers call it the "default mode network" — a set of regions that activate not when you focus, but when you stop.
 
-                </div>
+When you daydream. When you let your mind wander between tasks. This network, for a long time, was treated as noise. The brain idling.
 
-            </div>
-        </div>
-    `;
-}
-function createPsychCard(text) {
-    return `
-        <div class="opaque-border bg-white p-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <p class="serif-font text-2xl italic mb-6">${text}</p>
-            <div class="flex gap-4">
-                <button onclick="revealInsight(this, true)" 
-                        class="text-[10px] font-bold uppercase border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
-                    Yes
-                </button>
-                <button onclick="revealInsight(this, false)" 
-                        class="text-[10px] font-bold uppercase border border-black px-4 py-2 hover:bg-black hover:text-white transition-all">
-                    Not really
-                </button>
-            </div>
-        </div>
-    `;
-}
-window.revealInsight = function(button, agreed) {
-    const card = button.closest(".opaque-border");
+It turned out to be the opposite. The default mode network is where the mind does its most integrative work — connecting distant ideas, running simulations of futures that haven't happened, rehearsing conversations, building and rebuilding a model of other people.
 
-    state.psychSession.answered += 1;
-    if (agreed) state.psychSession.yesCount += 1;
+The brain isn't resting when you're not focused. It's working on a different problem.`,
+        fork: {
+            prompt: "Where does that take you?",
+            left:  { label: "To the question of what we're actually optimizing for when we think.", next: "optim" },
+            right: { label: "To the people who can't turn it off.", next: "cant_stop" }
+        }
+    },
 
-    const insight = agreed
-        ? "You tend to mentally simulate outcomes."
-        : "You may process internally without conscious rehearsal.";
+    // ── BRANCH: MEANING ──
+    meaning: {
+        id: "meaning",
+        text: `There's a word in Japanese — *ma* — that roughly translates to the pause between things. The silence between notes that makes music music, not noise.
 
-    const reveal = document.createElement("p");
-    reveal.className = "serif-font text-lg italic mt-6 opacity-70";
-    reveal.innerText = insight;
+The pre-attentive moment might be something like that. Not the thought, but the space the thought arrives into.
 
-    card.appendChild(reveal);
+What's strange is that the space isn't neutral. It's already shaped — by what you've lost, what you want, what you've been told to want, what you secretly believe about yourself. The attention lands somewhere, and the landing is never random.`,
+        fork: {
+            prompt: "Which part of that pulls at you?",
+            left:  { label: "The shaping. How experience bends the space before we're even aware.", next: "shaping" },
+            right: { label: "The secret beliefs. The ones that operate without permission.", next: "secret" }
+        }
+    },
 
-    const buttons = card.querySelectorAll("button");
-    buttons.forEach(b => b.disabled = true);
+    // ── LEAVES ──
+    optim: {
+        id: "optim",
+        text: `The uncomfortable answer is: we don't fully know.
 
-    // If all 3 answered → transition
-    if (state.psychSession.answered === 3) {
-        setTimeout(showPsychSummary, 900);
+Cognitive efficiency is the easy answer — compress the world into patterns so you can navigate it faster. But that can't be all of it. The mind over-generates. It runs simulations of things that will never happen. It replays moments that are over. It constructs elaborate models of people it will never meet again.
+
+That's not efficient. That's something else.
+
+Some researchers think it's about meaning-making — that the mind is less a prediction machine and more a storytelling one. That what it's optimizing for isn't accuracy but coherence. A world that hangs together. A self that makes sense across time.
+
+The cost of that is high. We distort to cohere. We remember what fits and quietly lose what doesn't.
+
+But without it, there is no *you* that persists between moments. Just a sequence of present-tense experiences with no spine.`,
+        exit: {
+            path: "Anil Seth — Being You",
+            link: "https://www.goodreads.com/book/show/58329483-being-you"
+        }
+    },
+
+    cant_stop: {
+        id: "cant_stop",
+        text: `There's a particular exhaustion that has nothing to do with what you've done.
+
+It comes from thinking — from the kind of mind that doesn't wait to be asked. That narrates while it lives. That debrefs its own conversations. That lies awake not from worry exactly, but from the sheer volume of processing still running.
+
+Psychologists sometimes call this "high dispositional rumination." The word sounds clinical. The experience is closer to being trapped in a room with someone who will not stop talking — and the someone is you.
+
+What's harder to say is that this same quality, the not-stopping, is also where a lot of insight comes from. The mind that can't leave things alone is the same mind that notices what others walk past.
+
+The cost and the gift are the same feature. There's no surgery for it.`,
+        exit: {
+            path: "Adam Phillips — On Flirtation",
+            link: "https://www.goodreads.com/book/show/276382.On_Flirtation"
+        }
+    },
+
+    shaping: {
+        id: "shaping",
+        text: `The psychologist Jerome Bruner spent decades arguing that perception is never innocent.
+
+We don't receive the world — we construct it, using everything we already believe as scaffolding. The stranger you decide looks unfriendly. The room you walk into and immediately distrust. The sentence you read and already know you'll disagree with before you've finished it.
+
+This isn't bias in the pejorative sense. It's architecture. The mind can't process everything, so it builds shortcuts out of experience — and those shortcuts are, necessarily, built from a past that is yours and no one else's.
+
+The unnerving part: you can't see the scaffolding. You only see the building it produces. The perception arrives already finished, already feeling like the world.`,
+        exit: {
+            path: "Jerome Bruner — Acts of Meaning",
+            link: "https://www.goodreads.com/book/show/209736.Acts_of_Meaning"
+        }
+    },
+
+    secret: {
+        id: "secret",
+        text: `Freud's most durable idea isn't repression, or the Oedipus complex, or any of the things he's famous for.
+
+It's the observation that we are not the sole authors of our own behavior. That something operates underneath — not malevolently, not mystically, but structurally. A set of beliefs so foundational they never had to be decided. They were absorbed.
+
+The therapist's question — "where do you think that comes from?" — is an invitation to excavate. To find the moment a conclusion was drawn and never revisited. To notice that the thing you believe about yourself might be a story someone else told you when you were too young to argue.
+
+What's strange is that excavating it doesn't always change it. You can know exactly where the pattern comes from and still run it. Understanding is not the same thing as freedom. But it does change the relationship. The pattern is still there — but now you can see it from the outside, at least some of the time.`,
+        exit: {
+            path: "Alain de Botton — The School of Life",
+            link: "https://www.theschooloflife.com/article/the-origin-of-our-psychological-problems/"
+        }
     }
 };
 
-function showPsychSummary() {
+// ─── STATE ──────────────────────────────────────────────────────────────────
+
+let essayState = {
+    path: [],       // node ids visited
+    currentId: "root"
+};
+
+// ─── ENTRY ──────────────────────────────────────────────────────────────────
+
+function renderPsychologyEntry() {
+    essayState = { path: [], currentId: "root" };
+
     const app = document.getElementById("app");
-    const score = state.psychSession.yesCount;
-
-    let profile;
-    if (score === 0) profile = "Detached Observer";
-    else if (score === 1) profile = "Selective Reflector";
-    else if (score === 2) profile = "Deep Processor";
-    else profile = "Overactive Narrator";
-
     app.innerHTML = `
-        <div class="fixed inset-0 bg-[#e8e3d6] z-[100] flex items-center justify-center animate-expand-circle">
-            <div class="text-center max-w-xl px-6">
-                <p class="text-[10px] uppercase tracking-widest opacity-40 mb-6">Pattern Detected</p>
-                <h1 class="serif-font text-5xl italic mb-8">${profile}</h1>
-                <p class="serif-font text-xl opacity-70 mb-12">
-                    Your mind leans toward ${profile.toLowerCase()} processing.
-                </p>
-                <button onclick="loadPsychEssay()" 
-                        class="text-[10px] font-bold uppercase border border-black px-6 py-3 hover:bg-black hover:text-white transition-all">
-                    Explore this pattern →
+        <div class="fixed inset-0 bg-[#f2eee3] z-[100] overflow-y-auto animate-expand-circle" id="essay-shell">
+            <div class="max-w-2xl mx-auto px-6 py-24 min-h-screen">
+
+                <button onclick="navigate('lens')"
+                        class="text-[10px] font-bold uppercase mb-20 opacity-30 hover:opacity-100 transition-all italic block">
+                    ← Back to Lens
                 </button>
+
+                <div id="essay-body" class="space-y-0">
+                    <!-- nodes append here -->
+                </div>
+
             </div>
         </div>
     `;
+
+    appendNode("root");
 }
-window.loadPsychEssay = function() {
-    const item = Generatedcontent.find(c => 
-        c.lens === "thinker" && c.category === "Psychology"
-    );
 
-    if (!item) return;
+// ─── APPEND A NODE ──────────────────────────────────────────────────────────
 
-    const bodyHTML = Array.isArray(item.body) 
-        ? item.body.map(p => `<p class="mb-8">${p}</p>`).join('')
-        : item.body.split('\n\n').map(p => `<p class="mb-8">${p}</p>`).join('');
+function appendNode(nodeId) {
+    const node = ESSAY[nodeId];
+    if (!node) return;
 
-    const app = document.getElementById("app");
+    essayState.path.push(nodeId);
+    essayState.currentId = nodeId;
 
-    app.innerHTML = `
-        <div class="fixed inset-0 bg-[#f2eee3] z-[100] overflow-y-auto animate-expand-circle">
-            <div class="max-w-2xl mx-auto px-6 py-24">
-                <button onclick="navigate('lens')" 
-                        class="text-[10px] font-bold uppercase mb-12 opacity-50 italic">
-                    ← Return
-                </button>
+    const body = document.getElementById("essay-body");
 
-                <h1 class="serif-font text-5xl italic mb-12">
-                    The Mind's Ever-Sculpting Hand
-                </h1>
+    const block = document.createElement("div");
+    block.className = "essay-node opacity-0";
+    block.style.transform = "translateY(24px)";
+    block.style.transition = "opacity 0.7s ease, transform 0.7s ease";
 
-                <div class="serif-font text-xl leading-relaxed text-gray-800">
-                    ${bodyHTML}
+    const paragraphs = node.text.trim().split('\n\n').map(p =>
+        `<p class="serif-font text-xl leading-relaxed text-gray-800 mb-6">${p.trim()}</p>`
+    ).join('');
+
+    if (node.fork) {
+        block.innerHTML = `
+            <div class="mb-16">
+                ${paragraphs}
+            </div>
+
+            <div class="mb-24 pl-6 border-l border-black/10">
+                <p class="text-[10px] uppercase tracking-[0.3em] font-bold opacity-30 mb-8">
+                    ${node.fork.prompt}
+                </p>
+                <div class="flex flex-col gap-3">
+                    <button
+                        data-next="${node.fork.left.next}"
+                        onclick="window._essayChoose('${node.fork.left.next}')"
+                        class="essay-choice text-left opaque-border bg-white px-7 py-5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all group">
+                        <span class="serif-font text-lg italic group-hover:opacity-70 transition-all">
+                            ${node.fork.left.label}
+                        </span>
+                    </button>
+                    <button
+                        data-next="${node.fork.right.next}"
+                        onclick="window._essayChoose('${node.fork.right.next}')"
+                        class="essay-choice text-left opaque-border bg-white px-7 py-5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all group">
+                        <span class="serif-font text-lg italic group-hover:opacity-70 transition-all">
+                            ${node.fork.right.label}
+                        </span>
+                    </button>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    } else {
+        // Leaf — show ending + exit link
+        block.innerHTML = `
+            <div class="mb-20">
+                ${paragraphs}
+            </div>
+
+            <div class="border-t border-black/10 pt-10 pb-32">
+                <p class="text-[10px] uppercase font-bold tracking-widest opacity-30 mb-4 italic">
+                    follow this further
+                </p>
+                <a href="${node.exit.link}" target="_blank"
+                   class="serif-font text-2xl italic underline decoration-1 underline-offset-8 hover:opacity-40 transition-all">
+                    ${node.exit.path} →
+                </a>
+            </div>
+        `;
+    }
+
+    body.appendChild(block);
+
+    // Animate in
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            block.style.opacity = "1";
+            block.style.transform = "translateY(0)";
+        });
+    });
+
+    // Scroll to new block after it appears
+    setTimeout(() => {
+        block.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 200);
+}
+
+// ─── CHOICE ─────────────────────────────────────────────────────────────────
+
+window._essayChoose = function(nextId) {
+    // Lock all current choice buttons
+    document.querySelectorAll(".essay-choice").forEach(btn => {
+        btn.disabled = true;
+    });
+
+    // Fade out unchosen buttons
+    document.querySelectorAll(".essay-choice").forEach(btn => {
+        const dest = btn.getAttribute("data-next");
+        if (dest !== nextId) {
+            btn.style.transition = "opacity 0.4s ease";
+            btn.style.opacity = "0.15";
+        }
+    });
+
+    // Small pause then continue the essay
+    setTimeout(() => appendNode(nextId), 600);
 };
