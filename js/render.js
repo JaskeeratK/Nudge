@@ -96,62 +96,6 @@ export function renderReadingMode(articleId) {
     window.scrollTo(0, 0);
 }
 
-// export function renderLens() {
-//     const lens = lenses[state.currentLens];
-//     const app = document.getElementById("app");
-
-//     app.innerHTML = `
-//         <div class="mb-20 reveal-card">
-//             <button onclick="navigate('home')" class="text-[10px] font-bold uppercase mb-4 opacity-50 hover:opacity-100 transition-opacity">← Back</button>
-//             <h1 class="serif-font text-5xl italic">${lens.title}</h1>
-//         </div>
-
-//         <div id="lens-ring"></div>
-
-//         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-//             ${lens.subdomains.map(sub => `
-//                 <div class="subdomain-card h-64 opaque-border bg-white overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" 
-//                      onclick="navigate('subdomain_feed', '${sub.id}')">
-                    
-//                     <div class="subdomain-label inset-0 flex items-center justify-center">
-//                         <span class="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40">${sub.label}</span>
-//                     </div>
-
-//                     <div class="glimpse-layer">
-//                         <p class="serif-font text-xl italic ${sub.color} text-center">${sub.glimpse}</p>
-//                     </div>
-//                 </div>
-//             `).join('')}
-//         </div>
-//     `;
-
-//     setupOpticalLens();
-// }
-
-// function setupOpticalLens() {
-//     const ring = document.getElementById('lens-ring');
-//     const cards = document.querySelectorAll('.subdomain-card');
-
-//     document.addEventListener('mousemove', (e) => {
-//         const x = e.clientX;
-//         const y = e.clientY;
-
-//         // Move the visual ring
-//         ring.style.display = 'block';
-//         ring.style.transform = `translate(${x - 80}px, ${y - 80}px)`;
-
-//         // Update the mask position for every card
-//         cards.forEach(card => {
-//             const rect = card.getBoundingClientRect();
-//             // Calculate relative coordinates inside the card
-//             const relX = x - rect.left;
-//             const relY = y - rect.top;
-            
-//             card.style.setProperty('--mouse-x', `${relX}px`);
-//             card.style.setProperty('--mouse-y', `${relY}px`);
-//         });
-//     });
-// }
 
 export function renderLens() {
     const lens = lenses[state.currentLens];
