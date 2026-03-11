@@ -46,29 +46,6 @@ export function renderHome() {
     `;
 }
 
-// export function renderLens() {
-//     const lens = lenses[state.currentLens];
-//     const filtered = content.filter(item => item.lens === state.currentLens);
-
-//     document.getElementById("app").innerHTML = `
-//         <div class="mb-20">
-//             <button onclick="navigate('home')" class="text-[10px] font-bold uppercase mb-4 opacity-50 hover:opacity-100 transition-opacity">← Back to discovery</button>
-//             <p class="text-[10px] uppercase tracking-widest opacity-40">Viewing through:</p>
-//             <h1 class="serif-font text-5xl italic">${lens.title}</h1>
-//             <p class="text-sm mt-2 opacity-60">You can change this anytime.</p>
-//         </div>
-
-//         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-//             ${filtered.map(item => `
-//                 <div class="opaque-border bg-white p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer" onclick="viewArticle('${item.id}')">
-//                     <span class="text-[10px] font-bold uppercase ${item.color}">${item.category}</span>
-//                     <h3 class="serif-font text-2xl italic my-2">${item.title}</h3>
-//                     <p class="text-xs text-gray-500 line-clamp-2">${item.description}</p>
-//                 </div>
-//             `).join('')}
-//         </div>
-//     `;
-// }
 
 export function renderReadingMode(articleId) {
     const item = content.find(c => c.id === articleId);
